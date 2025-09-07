@@ -3,8 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-// ✅ Import UserProfile
-import UserProfile from './components/UserProfile'
+// ✅ Import Counter
+import Counter from './components/Counter'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,12 +32,8 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
 
-      {/* ✅ Use UserProfile */}
-      <UserProfile 
-        name="Alice" 
-        age="25" 
-        bio="Loves hiking and photography" 
-      />
+      {/* ✅ Use Counter here */}
+      <Counter />
     </>
   )
 }
