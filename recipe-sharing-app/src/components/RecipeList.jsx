@@ -1,4 +1,5 @@
-import { useRecipeStore } from '../recipeStore';
+// Inside RecipeList.jsx and AddRecipeForm.jsx
+import useRecipeStore from './recipeStore';
 
 const RecipeList = () => {
   const recipes = useRecipeStore((state) => state.recipes);
