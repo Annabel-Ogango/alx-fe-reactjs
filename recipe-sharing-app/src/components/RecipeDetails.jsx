@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useRecipeStore } from './recipeStore';
 import DeleteRecipeButton from './DeleteRecipeButton';
+import EditRecipeForm from './EditRecipeForm';
 
 const RecipeDetails = () => {
   const { recipeId } = useParams();
@@ -8,9 +9,7 @@ const RecipeDetails = () => {
     state.recipes.find((r) => r.id === Number(recipeId))
   );
 
-  if (!recipe) {
-    return <p>Recipe not found.</p>;
-  }
+  if (!recipe) return <p>Recipe not found.</p>;
 
   return (
     <div>
@@ -19,6 +18,10 @@ const RecipeDetails = () => {
 
       <Link to={`/recipes/${recipe.id}/edit`}>Edit Recipe</Link>
       <DeleteRecipeButton recipeId={recipe.id} />
+      {/* Show small edit form inline if you prefer, but routes exist */}
+      <hr />
+      <h3>Quick Edit</h3>
+      <EditRecipeForm recipe={recipe} />
     </div>
   );
 };

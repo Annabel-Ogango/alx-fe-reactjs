@@ -1,32 +1,42 @@
 import create from 'zustand';
 
 export const useRecipeStore = create((set) => ({
-  // Core data
+  // core data
   recipes: [],
-  favorites: [],
+  // search/filter
   searchTerm: '',
   filteredRecipes: [],
 
-  // Actions
-  setRecipes: (recipes) => set({ recipes }),
+  // Task 1 required: setRecipes
+  setRecipes: (recipes) => set({ recipes, filteredRecipes: recipes }),
 
+  // add / update / delete
   addRecipe: (newRecipe) =>
-    set((state) => ({ recipes: [...state.recipes, newRecipe] })),
+    set((state) => {
+      const updated = [...state.recipes, newRecipe];
+      return { recipes: updated, filteredRecipes: updated };
+    }),
 
   updateRecipe: (updatedRecipe) =>
-    set((state) => ({
-      recipes: state.recipes.map((recipe) =>
-        recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-      ),
-    })),
+    set((state) => {
+      const updated = state.recipes.map((r) =>
+        r.id === updatedRecipe.id ? updatedRecipe : r
+      );
+      return { recipes: updated, filteredRecipes: updated };
+    }),
 
   deleteRecipe: (id) =>
-    set((state) => ({
-      recipes: state.recipes.filter((recipe) => recipe.id !== id),
-    })),
+    set((state) => {
+      const updated = state.recipes.filter((r) => r.id !== id);
+      return { recipes: updated, filteredRecipes: updated };
+    }),
 
-  // Search & filter actions
+  // search actions (Task 3)
   setSearchTerm: (term) => set({ searchTerm: term }),
   filterRecipes: () =>
     set((state) => ({
       filteredRecipes: state.recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
+    })),
+}));

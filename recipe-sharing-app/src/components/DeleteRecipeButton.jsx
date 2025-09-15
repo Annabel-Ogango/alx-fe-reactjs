@@ -7,7 +7,7 @@ const DeleteRecipeButton = ({ recipeId }) => {
 
   const handleDelete = () => {
     deleteRecipe(recipeId);
-    navigate('/');
+    navigate('/'); // after delete, navigate to home/list
   };
 
   return <button onClick={handleDelete}>Delete Recipe</button>;
