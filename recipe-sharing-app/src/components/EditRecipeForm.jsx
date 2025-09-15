@@ -1,36 +1,26 @@
-import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useRecipeStore } from './recipeStore';
+import DeleteRecipeButton from './DeleteRecipeButton';
 
-const EditRecipeForm = ({ recipe, onClose }) => {
-  const updateRecipe = useRecipeStore(state => state.updateRecipe);
-  const [title, setTitle] = useState(recipe.title);
-  const [description, setDescription] = useState(recipe.description);
+const RecipeDetails = () => {
+  const { recipeId } = useParams();
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id === Number(recipeId))
+  );
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // ✅ Make sure we explicitly use "event"
-    updateRecipe({ ...recipe, title, description });
-    if (onClose) onClose(); // Close the edit form after saving
-  };
+  if (!recipe) {
+    return <p>Recipe not found.</p>;
+  }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
-        style={{ display: 'block', margin: '10px 0' }}
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-        style={{ display: 'block', margin: '10px 0' }}
-      />
-      <button type="submit">Save Changes</button>
-      <button type="button" onClick={onClose} style={{ marginLeft: '10px' }}>Cancel</button>
-    </form>
+    <div>
+      <h1>{recipe.title}</h1>
+      <p>{recipe.description}</p>
+
+      <Link to={`/recipes/${recipe.id}/edit`}>Edit Recipe</Link>
+      <DeleteRecipeButton recipeId={recipe.id} />
+    </div>
   );
 };
 
-export default EditRecipeForm;
+export default RecipeDetails;
