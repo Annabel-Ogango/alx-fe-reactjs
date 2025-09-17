@@ -1,24 +1,31 @@
 // src/components/Search.jsx
 import { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import { fetchUserData, searchUsers } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!username.trim()) return;
+    if (!username.trim() && !location.trim() && !minRepos.trim()) return;
 
     setLoading(true);
     setError("");
-    setUserData(null);
+    setResults([]);
 
     try {
-      const data = await fetchUserData(username);
-      setUserData(data);
+      // Use searchUsers for advanced search
+      const data = await searchUsers(username, location, minRepos);
+      if (data.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setResults(data);
+      }
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
@@ -27,35 +34,65 @@ const Search = () => {
   };
 
   return (
-    <div className="p-4">
-      <form onSubmit={handleSubmit} className="mb-4">
+    <div className="max-w-lg w-full p-4 bg-white rounded-xl shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          placeholder="Search GitHub username..."
+          placeholder="GitHub username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="border p-2 rounded mr-2"
+          className="border p-2 rounded w-full"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <input
+          type="text"
+          placeholder="Location (optional)"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+        <input
+          type="number"
+          placeholder="Min repositories (optional)"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full"
+        >
           Search
         </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {loading && <p className="mt-4 text-gray-600">Loading...</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
 
-      {userData && (
-        <div className="border p-4 rounded">
-          <img src={userData.avatar_url} alt={userData.login} className="w-24 h-24 rounded-full mb-2" />
-          <h2 className="text-xl font-bold">{userData.name || userData.login}</h2>
-          <a
-            href={userData.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 underline"
-          >
-            View Profile
-          </a>
+      {results.length > 0 && (
+        <div className="mt-6 space-y-4">
+          {results.map((user) => (
+            <div
+              key={user.id}
+              className="flex items-center space-x-4 p-3 border rounded-lg shadow-sm hover:shadow-md"
+            >
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-16 h-16 rounded-full"
+              />
+              <div>
+                <h2 className="text-lg font-semibold">{user.login}</h2>
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline text-sm"
+                >
+                  View Profile
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
