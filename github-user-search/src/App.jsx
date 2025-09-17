@@ -1,12 +1,13 @@
-import Search from './components/Search';
+// src/App.jsx
+import Search from "./components/Search";
 
-export default function App() {
+function App() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', padding: '48px', background: '#f6f8fa' }}>
-      <div style={{ width: '100%', maxWidth: 800 }}>
-        <h1 style={{ textAlign: 'center' }}>GitHub User Search</h1>
-        <Search />
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <h1 className="text-3xl font-bold mb-6">GitHub User Search</h1>
+      <Search />
     </div>
   );
 }
+
+export default App;
