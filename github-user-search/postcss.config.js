@@ -1,11 +1,6 @@
-/* Tailwind Directives - Required for Tailwind to work */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import tailwindcss from "@tailwindcss/postcss";
+import autoprefixer from "autoprefixer";
 
-/* Optional: Global styles (safe for checkers) */
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f9fafb; /* Light gray background */
-}
+export default {
+  plugins: [tailwindcss(), autoprefixer()],
+};
