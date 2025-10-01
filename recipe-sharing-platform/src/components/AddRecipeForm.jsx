@@ -3,12 +3,12 @@ import { useState } from "react";
 const AddRecipeForm = ({ onAddRecipe }) => {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [steps, setSteps] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !ingredients || !instructions) {
+    if (!title || !ingredients || !steps) {
       alert("Please fill in all fields before submitting.");
       return;
     }
@@ -17,7 +17,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
       id: Date.now(),
       title,
       ingredients,
-      instructions,
+      steps,
     };
 
     onAddRecipe(newRecipe);
@@ -25,7 +25,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     // Clear form after submission
     setTitle("");
     setIngredients("");
-    setInstructions("");
+    setSteps("");
   };
 
   return (
@@ -52,11 +52,11 @@ const AddRecipeForm = ({ onAddRecipe }) => {
         className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
       />
 
-      {/* Instructions */}
+      {/* Steps */}
       <textarea
-        placeholder="Instructions"
-        value={instructions}
-        onChange={(e) => setInstructions(e.target.value)}
+        placeholder="Preparation Steps"
+        value={steps}
+        onChange={(e) => setSteps(e.target.value)}
         className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
       />
 
